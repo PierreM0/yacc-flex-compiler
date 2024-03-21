@@ -1,1 +1,5 @@
 int x := 65;
+while not (x = 70) do
+  x = x + 1;
+  putc(x);
+end

@@ -8,3 +8,7 @@ lex.yy.c: projet.l
 	$(LEX) projet.l
 y.tab.c: projet.y
 	$(YACC) projet.y
+clean:
+	rm projet.*.c
+	rm projet.*.h
+	rm projet

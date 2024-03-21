@@ -1,86 +1,158 @@
 %{
+struct node;
+typedef struct node Node;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
+#include "tree.h"
+
 
 int yylex();
-/* The extra parameter is also given to yyerror */
+void yyerror(char* msg);
+/*TODO: en faire un tableau dynamique*/
 %}
 
-%union {int num;}
+%union {
+  int num;
+  char* str;
+  char* ident;
+  struct node* node;
+};
 %start input 
 
-%token INT IDENT SEMICOLON END IF WHILE ELSE DO ASSIGN IMM_STR
-%left EQUAL ADD IMM_STR OPEN_PAREN CLOSE_PAREN NOT
-%left <num> IMM_INT
+%right ASSIGN
+%left EQUAL ADD
+%nonassoc OPEN_PAREN CLOSE_PAREN NOT
+%nonassoc INT SEMICOLON END ELSE DO 
+%left IF WHILE 
+%nonassoc <num> IMM_INT
+%nonassoc <str> IMM_STR 
+%nonassoc <ident> IDENT
+
+%type <node> input body expr funcall assign_stmt assign_stmt_decl statement
+%type <node> while_control_flow if_control_flow type
 
 %%
 input:
-     input ligne
-     | /* vide */
+     body
      {
-	printf("input\n");
-     };
-
-
-ligne:
-     assign_expr_with_decl
-     | assign_expr 
-     | if_control_flow
-     | while_control_flow
-     | funcall
-     {
-	printf("ligne\n");
+     $$ = $1;
      }
 
+body:
+    body body 
+    {
+      $$ = new_statement($1, $2);
+    }
+    | if_control_flow
+    {
+      $$ = $1;
+    }
+    | while_control_flow
+    {
+      $$ = $1;
+    }
+    | statement SEMICOLON
+    {
+      $$ = $1;
+    }
+
+
+statement:
+     assign_stmt_decl
+     {
+       $$ = $1;
+     }
+     | assign_stmt
+     {
+       $$ = $1;
+     }
+     | expr
+     {
+       $$ = $1;
+     }
+
+    /*todo: everyting must be an expr: also block etc.*/
+
 if_control_flow:
-	       IF expr DO input END
-	       | IF expr DO input ELSE input END
+	       IF expr DO body END
 	       {
-	         printf("if\n");
+	       //assert("Not implemented");
+	       }
+	       | IF expr DO body ELSE body END
+	       {
+	       //assert("Not implemented");
 	       }
 
 while_control_flow:
-		  WHILE expr DO input END
+		  WHILE expr DO body END
 		  {
-		    printf("while\n");
+		      $$ = new_while($2, $4);
 		  }
 
-assign_expr_with_decl: 
-		     type IDENT ASSIGN expr SEMICOLON
+assign_stmt_decl: 
+		     type IDENT ASSIGN expr
 		     {
-		       printf("assign with decl\n");
+		        $$ = new_declaration($2, $1, $4);
 		     }
 	
-assign_expr: 
-	   IDENT ASSIGN expr SEMICOLON
+assign_stmt: 
+	   IDENT ASSIGN expr
 	   {
-	     printf("assign no decl\n");
+	      $$ = new_assign($1, $3);
 	   }
 
 funcall:
-       IDENT OPEN_PAREN IDENT CLOSE_PAREN SEMICOLON
+       IDENT OPEN_PAREN expr CLOSE_PAREN
        {
-         printf("funcall\n");
+         $$ = new_funcall($1, $3);
        }
 
 type:
-    INT 
+    INT 	  
+    {
+	  //assert(0, "Not implemented");
+    }
 
 expr:
       NOT expr
+	{
+	  $$ = new_unaryop(NODETYPE_NOT, $2);
+	}
 	| expr EQUAL expr
+	{
+	  $$ = new_binop($1, NODETYPE_EQUAL, $3);
+	}
 	| expr ADD expr
+	{
+	  $$ = new_binop($1, NODETYPE_ADD, $3);
+	}
         | OPEN_PAREN expr CLOSE_PAREN
+	{
+	  $$ = $2;
+	}
+        | funcall 
+	{
+	  $$ = $1;
+	}
         | IMM_INT 
 	  {
-	    printf("dans expr: %d", $1.num);
+	  $$ = new_imm((void*) $1, NODETYPE_IMM_INT);
 	  }
         | IMM_STR
+	  {
+	  //assert(0, "Not implemented");
+	  }
 	| IDENT
+	{
+	  $$ = new_var($1);
+	}
+
 %%
 
-void yyerror(const char* msg) {
+void yyerror(char* msg) {
 	printf("ERROR:%d: %s.\n", yylineno, msg);
 }
 
@@ -93,8 +165,9 @@ int main(int argc, char* argv[]) {
 	if (fp == NULL) {
 	  fprintf(stderr, "ERROR: can't open src file.\n");
 	}
-
 	yyin = fp;
-	yyparse();
+	Node* start = yyparse();
+
+	generate_code(start);
 	return 69;
 }

@@ -54,22 +54,22 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    INT = 258,                     /* INT  */
-    IDENT = 259,                   /* IDENT  */
-    SEMICOLON = 260,               /* SEMICOLON  */
-    END = 261,                     /* END  */
-    IF = 262,                      /* IF  */
-    WHILE = 263,                   /* WHILE  */
-    ELSE = 264,                    /* ELSE  */
-    DO = 265,                      /* DO  */
-    ASSIGN = 266,                  /* ASSIGN  */
-    IMM_STR = 267,                 /* IMM_STR  */
-    EQUAL = 268,                   /* EQUAL  */
-    ADD = 269,                     /* ADD  */
-    OPEN_PAREN = 270,              /* OPEN_PAREN  */
-    CLOSE_PAREN = 271,             /* CLOSE_PAREN  */
-    NOT = 272,                     /* NOT  */
-    IMM_INT = 273                  /* IMM_INT  */
+    ASSIGN = 258,                  /* ASSIGN  */
+    EQUAL = 259,                   /* EQUAL  */
+    ADD = 260,                     /* ADD  */
+    OPEN_PAREN = 261,              /* OPEN_PAREN  */
+    CLOSE_PAREN = 262,             /* CLOSE_PAREN  */
+    NOT = 263,                     /* NOT  */
+    INT = 264,                     /* INT  */
+    SEMICOLON = 265,               /* SEMICOLON  */
+    END = 266,                     /* END  */
+    ELSE = 267,                    /* ELSE  */
+    DO = 268,                      /* DO  */
+    IF = 269,                      /* IF  */
+    WHILE = 270,                   /* WHILE  */
+    IMM_INT = 271,                 /* IMM_INT  */
+    IMM_STR = 272,                 /* IMM_STR  */
+    IDENT = 273                    /* IDENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -78,10 +78,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "projet.y"
-int num;
+#line 17 "projet.y"
 
-#line 85 "projet.tab.h"
+  int num;
+  char* str;
+  char* ident;
+  struct node* node;
+
+#line 89 "projet.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
