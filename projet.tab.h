@@ -78,9 +78,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "projet.y"
+#line 19 "projet.y"
 
-  int num;
+  long num;
   char* str;
   char* ident;
   struct node* node;

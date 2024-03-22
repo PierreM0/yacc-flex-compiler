@@ -473,10 +473,12 @@ char *yytext;
 #line 3 "projet.l"
 	#include <stdlib.h>
 	#include <stdio.h>
+#include "tree.h"
+#include "generator.h"
 	#include "projet.tab.h"
 	#include "projet.tab.c"
-#line 478 "lex.yy.c"
-#line 479 "lex.yy.c"
+#line 480 "lex.yy.c"
+#line 481 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -693,10 +695,10 @@ YY_DECL
 		}
 
 	{
-#line 16 "projet.l"
+#line 18 "projet.l"
 
 
-#line 699 "lex.yy.c"
+#line 701 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -755,107 +757,107 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "projet.l"
+#line 20 "projet.l"
 {return(INT);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 19 "projet.l"
+#line 21 "projet.l"
 {  /* On l'ignore */  }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "projet.l"
-{yylval.num = atoi(yytext); return(IMM_INT);}
+#line 22 "projet.l"
+{yylval.num = atol(yytext); return(IMM_INT);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 21 "projet.l"
+#line 23 "projet.l"
 {yylineno += 1;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 22 "projet.l"
+#line 24 "projet.l"
 {return(EQUAL);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 23 "projet.l"
+#line 25 "projet.l"
 {return(ASSIGN);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 24 "projet.l"
+#line 26 "projet.l"
 {return(SEMICOLON);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 25 "projet.l"
+#line 27 "projet.l"
 {return(WHILE);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 26 "projet.l"
+#line 28 "projet.l"
 {return(IF);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 27 "projet.l"
+#line 29 "projet.l"
 {return(ELSE);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 28 "projet.l"
+#line 30 "projet.l"
 {return(DO);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 29 "projet.l"
+#line 31 "projet.l"
 {return(END);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 30 "projet.l"
+#line 32 "projet.l"
 {return(NOT);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 31 "projet.l"
+#line 33 "projet.l"
 {return(ADD);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 32 "projet.l"
+#line 34 "projet.l"
 {return(OPEN_PAREN);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 33 "projet.l"
+#line 35 "projet.l"
 {return(CLOSE_PAREN);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 34 "projet.l"
+#line 36 "projet.l"
 {yylval.ident = strdup(yytext); return(IDENT);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 35 "projet.l"
+#line 37 "projet.l"
 {yylval.str = strdup(yytext); return(IMM_STR);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 37 "projet.l"
+#line 39 "projet.l"
 { yyerror("ident not known"); } 
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 39 "projet.l"
+#line 41 "projet.l"
 ECHO;
 	YY_BREAK
-#line 858 "lex.yy.c"
+#line 860 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1860,6 +1862,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 39 "projet.l"
+#line 41 "projet.l"
 
 

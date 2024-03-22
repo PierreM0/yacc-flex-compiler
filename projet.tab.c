@@ -69,6 +69,8 @@
 /* First part of user prologue.  */
 #line 1 "projet.y"
 
+#include "tree.h"
+#include "generator.h"
 struct node;
 typedef struct node Node;
 
@@ -76,14 +78,14 @@ typedef struct node Node;
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-#include "tree.h"
 
 
+Node* start;
 int yylex();
 void yyerror(char* msg);
 /*TODO: en faire un tableau dynamique*/
 
-#line 87 "projet.tab.c"
+#line 89 "projet.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -468,7 +470,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  26
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   85
+#define YYLAST   89
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  19
@@ -528,9 +530,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    39,    39,    45,    49,    53,    57,    64,    68,    72,
-      80,    84,    90,    96,   102,   108,   114,   120,   124,   128,
-     132,   136,   140,   144,   148
+       0,    41,    41,    48,    53,    58,    63,    71,    76,    81,
+      90,    95,   102,   109,   116,   123,   130,   136,   141,   146,
+     151,   156,   161,   166,   170
 };
 #endif
 
@@ -576,8 +578,8 @@ static const yytype_int8 yypact[] =
 {
       59,    63,    63,    -7,    63,    63,    -7,    -7,    -2,     7,
       59,    -1,    -7,    -7,    -7,    -7,    -7,    -6,    19,     9,
-      78,    -7,    17,    22,    63,    10,    -7,    59,    -7,    26,
-      63,    63,    -7,    59,    59,    19,    29,    63,    -7,    -7,
+      78,    -7,    17,    23,    63,    63,    -7,    59,    -7,    26,
+      63,    63,    -7,    59,    59,    19,    82,    63,    -7,    -7,
        2,    33,    -7,    19,    -7,    59,    -7,    46,    -7
 };
 
@@ -614,26 +616,26 @@ static const yytype_int8 yytable[] =
 {
       10,    24,    20,    21,    25,    22,    23,    26,     1,    28,
        2,     3,    29,    44,    45,    25,     4,     5,     6,     7,
-       8,    30,    31,    30,    31,    35,    30,    31,    36,    37,
-      33,    38,    39,    40,    41,    34,    42,     0,    43,     1,
+       8,    30,    31,    30,    31,    35,    36,    30,    31,    37,
+      33,    38,    39,    40,    41,     0,    34,     0,    43,     1,
        0,     2,     3,     0,    46,    47,     0,     4,     5,     6,
        7,     8,     1,     0,     2,     3,     0,    48,     0,     0,
        4,     5,     6,     7,     8,     1,     0,     2,     3,     1,
        0,     2,     0,     4,     5,     6,     7,     8,     0,     6,
-       7,    19,    30,    31,     0,    32
+       7,    19,    30,    31,     0,    32,    30,    31,     0,    42
 };
 
 static const yytype_int8 yycheck[] =
 {
        0,     3,     1,     2,     6,     4,     5,     0,     6,    10,
        8,     9,    18,    11,    12,     6,    14,    15,    16,    17,
-      18,     4,     5,     4,     5,    24,     4,     5,    18,     3,
-      13,    30,    31,    33,    34,    13,     7,    -1,    37,     6,
+      18,     4,     5,     4,     5,    24,    25,     4,     5,     3,
+      13,    30,    31,    33,    34,    -1,    13,    -1,    37,     6,
       -1,     8,     9,    -1,    11,    45,    -1,    14,    15,    16,
       17,    18,     6,    -1,     8,     9,    -1,    11,    -1,    -1,
       14,    15,    16,    17,    18,     6,    -1,     8,     9,     6,
       -1,     8,    -1,    14,    15,    16,    17,    18,    -1,    16,
-      17,    18,     4,     5,    -1,     7
+      17,    18,     4,     5,    -1,     7,     4,     5,    -1,     7
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -643,7 +645,7 @@ static const yytype_int8 yystos[] =
        0,     6,     8,     9,    14,    15,    16,    17,    18,    20,
       21,    22,    23,    24,    25,    26,    27,    28,    29,    18,
       29,    29,    29,    29,     3,     6,     0,    21,    10,    18,
-       4,     5,     7,    13,    13,    29,    18,     3,    29,    29,
+       4,     5,     7,    13,    13,    29,    29,     3,    29,    29,
       21,    21,     7,    29,    11,    12,    11,    21,    11
 };
 
@@ -1124,191 +1126,212 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* input: body  */
-#line 40 "projet.y"
+#line 42 "projet.y"
      {
-     (yyval.node) = (yyvsp[0].node);
+     start = (yyvsp[0].node);
+     printf("input -> body: %p\n",start); 
      }
-#line 1132 "projet.tab.c"
+#line 1135 "projet.tab.c"
     break;
 
   case 3: /* body: body body  */
-#line 46 "projet.y"
+#line 49 "projet.y"
     {
       (yyval.node) = new_statement((yyvsp[-1].node), (yyvsp[0].node));
+     printf("body -> body: %p\n", (yyval.node));
     }
-#line 1140 "projet.tab.c"
+#line 1144 "projet.tab.c"
     break;
 
   case 4: /* body: if_control_flow  */
-#line 50 "projet.y"
-    {
-      (yyval.node) = (yyvsp[0].node);
-    }
-#line 1148 "projet.tab.c"
-    break;
-
-  case 5: /* body: while_control_flow  */
 #line 54 "projet.y"
     {
       (yyval.node) = (yyvsp[0].node);
+     printf("body -> if: %p\n", (yyval.node));
     }
-#line 1156 "projet.tab.c"
+#line 1153 "projet.tab.c"
+    break;
+
+  case 5: /* body: while_control_flow  */
+#line 59 "projet.y"
+    {
+      (yyval.node) = (yyvsp[0].node);
+     printf("body -> while: %p\n", (yyval.node));
+    }
+#line 1162 "projet.tab.c"
     break;
 
   case 6: /* body: statement SEMICOLON  */
-#line 58 "projet.y"
+#line 64 "projet.y"
     {
       (yyval.node) = (yyvsp[-1].node);
+     printf("body -> statemement ; : %p\n", (yyval.node));
     }
-#line 1164 "projet.tab.c"
+#line 1171 "projet.tab.c"
     break;
 
   case 7: /* statement: assign_stmt_decl  */
-#line 65 "projet.y"
+#line 72 "projet.y"
      {
        (yyval.node) = (yyvsp[0].node);
-     }
-#line 1172 "projet.tab.c"
-    break;
-
-  case 8: /* statement: assign_stmt  */
-#line 69 "projet.y"
-     {
-       (yyval.node) = (yyvsp[0].node);
+       printf("stmt -> assign: %p\n", (yyval.node));
      }
 #line 1180 "projet.tab.c"
     break;
 
-  case 9: /* statement: expr  */
-#line 73 "projet.y"
+  case 8: /* statement: assign_stmt  */
+#line 77 "projet.y"
      {
        (yyval.node) = (yyvsp[0].node);
+       printf("stmt -> assign: %p\n", (yyval.node));
      }
-#line 1188 "projet.tab.c"
+#line 1189 "projet.tab.c"
+    break;
+
+  case 9: /* statement: expr  */
+#line 82 "projet.y"
+     {
+       (yyval.node) = (yyvsp[0].node);
+       printf("stmt -> expr: %p\n", (yyval.node));
+     }
+#line 1198 "projet.tab.c"
     break;
 
   case 10: /* if_control_flow: IF expr DO body END  */
-#line 81 "projet.y"
+#line 91 "projet.y"
                {
 	       //assert("Not implemented");
+       printf("if-> if do end: %p\n", (yyval.node));
 	       }
-#line 1196 "projet.tab.c"
+#line 1207 "projet.tab.c"
     break;
 
   case 11: /* if_control_flow: IF expr DO body ELSE body END  */
-#line 85 "projet.y"
+#line 96 "projet.y"
                {
 	       //assert("Not implemented");
+       printf("if-> if do else end: %p\n", (yyval.node));
 	       }
-#line 1204 "projet.tab.c"
+#line 1216 "projet.tab.c"
     break;
 
   case 12: /* while_control_flow: WHILE expr DO body END  */
-#line 91 "projet.y"
+#line 103 "projet.y"
                   {
 		      (yyval.node) = new_while((yyvsp[-3].node), (yyvsp[-1].node));
+       printf("while -> while do end: %p\n", (yyval.node));
 		  }
-#line 1212 "projet.tab.c"
+#line 1225 "projet.tab.c"
     break;
 
   case 13: /* assign_stmt_decl: type IDENT ASSIGN expr  */
-#line 97 "projet.y"
+#line 110 "projet.y"
                      {
 		        (yyval.node) = new_declaration((yyvsp[-2].ident), (yyvsp[-3].node), (yyvsp[0].node));
+       printf("assign-> type ident <- expr: %p\n", (yyval.node));
 		     }
-#line 1220 "projet.tab.c"
+#line 1234 "projet.tab.c"
     break;
 
   case 14: /* assign_stmt: IDENT ASSIGN expr  */
-#line 103 "projet.y"
+#line 117 "projet.y"
            {
 	      (yyval.node) = new_assign((yyvsp[-2].ident), (yyvsp[0].node));
+       printf("assign-> ident <- expr: %p\n", (yyval.node));
 	   }
-#line 1228 "projet.tab.c"
+#line 1243 "projet.tab.c"
     break;
 
-  case 15: /* funcall: IDENT OPEN_PAREN IDENT CLOSE_PAREN  */
-#line 109 "projet.y"
+  case 15: /* funcall: IDENT OPEN_PAREN expr CLOSE_PAREN  */
+#line 124 "projet.y"
        {
-         (yyval.node) = new_funcall((yyvsp[-3].ident), (yyvsp[-1].ident));
+         (yyval.node) = new_funcall((yyvsp[-3].ident), (yyvsp[-1].node));
+       printf("funcall -> ident ( expr ): %p\n", (yyval.node));
        }
-#line 1236 "projet.tab.c"
-    break;
-
-  case 16: /* type: INT  */
-#line 115 "projet.y"
-    {
-	  //assert(0, "Not implemented");
-    }
-#line 1244 "projet.tab.c"
-    break;
-
-  case 17: /* expr: NOT expr  */
-#line 121 "projet.y"
-        {
-	  (yyval.node) = new_unaryop(NODETYPE_NOT, (yyvsp[0].node));
-	}
 #line 1252 "projet.tab.c"
     break;
 
-  case 18: /* expr: expr EQUAL expr  */
-#line 125 "projet.y"
-        {
-	  (yyval.node) = new_binop((yyvsp[-2].node), NODETYPE_EQUAL, (yyvsp[0].node));
-	}
+  case 16: /* type: INT  */
+#line 131 "projet.y"
+    {
+	  //assert(0, "Not implemented");
+    }
 #line 1260 "projet.tab.c"
     break;
 
+  case 17: /* expr: NOT expr  */
+#line 137 "projet.y"
+        {
+	  (yyval.node) = new_unaryop(NODETYPE_NOT, (yyvsp[0].node));
+       printf("expr -> not expr: %p\n", (yyval.node));
+	}
+#line 1269 "projet.tab.c"
+    break;
+
+  case 18: /* expr: expr EQUAL expr  */
+#line 142 "projet.y"
+        {
+	  (yyval.node) = new_binop((yyvsp[-2].node), NODETYPE_EQUAL, (yyvsp[0].node));
+       printf("expr -> expr = expr: %p\n", (yyval.node));
+	}
+#line 1278 "projet.tab.c"
+    break;
+
   case 19: /* expr: expr ADD expr  */
-#line 129 "projet.y"
+#line 147 "projet.y"
         {
 	  (yyval.node) = new_binop((yyvsp[-2].node), NODETYPE_ADD, (yyvsp[0].node));
+       printf("expr -> expr + expr: %p\n", (yyval.node));
 	}
-#line 1268 "projet.tab.c"
+#line 1287 "projet.tab.c"
     break;
 
   case 20: /* expr: OPEN_PAREN expr CLOSE_PAREN  */
-#line 133 "projet.y"
+#line 152 "projet.y"
         {
 	  (yyval.node) = (yyvsp[-1].node);
+       printf("expr -> (expr ): %p\n", (yyval.node));
 	}
-#line 1276 "projet.tab.c"
+#line 1296 "projet.tab.c"
     break;
 
   case 21: /* expr: funcall  */
-#line 137 "projet.y"
+#line 157 "projet.y"
         {
 	  (yyval.node) = (yyvsp[0].node);
+       printf("expr -> funcall: %p\n", (yyval.node));
 	}
-#line 1284 "projet.tab.c"
+#line 1305 "projet.tab.c"
     break;
 
   case 22: /* expr: IMM_INT  */
-#line 141 "projet.y"
+#line 162 "projet.y"
           {
 	  (yyval.node) = new_imm((void*) (yyvsp[0].num), NODETYPE_IMM_INT);
+       printf("expr -> imm int: %p\n", (yyval.node));
 	  }
-#line 1292 "projet.tab.c"
+#line 1314 "projet.tab.c"
     break;
 
   case 23: /* expr: IMM_STR  */
-#line 145 "projet.y"
+#line 167 "projet.y"
           {
 	  //assert(0, "Not implemented");
 	  }
-#line 1300 "projet.tab.c"
+#line 1322 "projet.tab.c"
     break;
 
   case 24: /* expr: IDENT  */
-#line 149 "projet.y"
+#line 171 "projet.y"
         {
 	  (yyval.node) = new_var((yyvsp[0].ident));
+       printf("expr -> ident: %p\n", (yyval.node));
 	}
-#line 1308 "projet.tab.c"
+#line 1331 "projet.tab.c"
     break;
 
 
-#line 1312 "projet.tab.c"
+#line 1335 "projet.tab.c"
 
       default: break;
     }
@@ -1501,7 +1524,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 153 "projet.y"
+#line 176 "projet.y"
 
 
 void yyerror(char* msg) {
@@ -1509,24 +1532,22 @@ void yyerror(char* msg) {
 }
 
 int main(int argc, char* argv[]) {
+	#if 0
 	if (argc != 2) {
 	  fprintf(stderr, "USAGE: ./projet <source file>\n");
 	  exit(1);
 	}
 	FILE * fp = fopen(argv[1], "r");
+	#else
+	FILE * fp = fopen("./file.src", "r");
+	#endif
 	if (fp == NULL) {
 	  fprintf(stderr, "ERROR: can't open src file.\n");
 	}
-
-	printf(
-	"export function w $main() {\n"
-	"@start\n"
-	);
-
 	yyin = fp;
 	yyparse();
-	printf(
-	"}\n"
-	);
+	printf("start: %p", start);
+
+	generate_code(start);
 	return 69;
 }

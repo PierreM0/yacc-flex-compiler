@@ -2,6 +2,8 @@
 %{
 	#include <stdlib.h>
 	#include <stdio.h>
+#include "tree.h"
+#include "generator.h"
 	#include "projet.tab.h"
 	#include "projet.tab.c"
 %}
@@ -17,7 +19,7 @@ identifiant   {lettre}({lettre}|{chiffre})*
 
 "int"         {return(INT);}
 {blanc}       {  /* On l'ignore */  }
-{entier}      {yylval.num = atoi(yytext); return(IMM_INT);}
+{entier}      {yylval.num = atol(yytext); return(IMM_INT);}
 "\n"          {yylineno += 1;}
 "="           {return(EQUAL);}
 ":="          {return(ASSIGN);}

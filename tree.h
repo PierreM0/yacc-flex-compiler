@@ -1,6 +1,5 @@
 #ifndef TREE_C
 #define TREE_C
-#include <cwchar>
 #include <stdlib.h>
 
 typedef enum {
@@ -61,6 +60,9 @@ typedef union {
 		void* value;
 		ImmNodeType type;
 	} imm; 
+	struct {
+		char* name;
+	} var;
 } AssociatedData;
 
 typedef struct node {
@@ -69,7 +71,7 @@ typedef struct node {
 } Node;
 
 /// n1 must be executed before n2
-inline Node* new_statement(Node *n1, Node* n2) {
+Node* new_statement(Node *n1, Node* n2) {
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_STMT;
 	n->data.statement.stmt1 = n1;
@@ -77,7 +79,7 @@ inline Node* new_statement(Node *n1, Node* n2) {
 	return n;
 }
 
-inline Node* new_while(Node* condition, Node* body) {
+Node* new_while(Node* condition, Node* body) {
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_WHILE;
 	n->data.while_.condition = condition;
@@ -85,7 +87,7 @@ inline Node* new_while(Node* condition, Node* body) {
 	return n; 
 }
 
-inline Node* new_assign(char* name, Node* expr) { 
+Node* new_assign(char* name, Node* expr) { 
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_ASSIGN;
 	n->data.assign.name = name;
@@ -93,7 +95,12 @@ inline Node* new_assign(char* name, Node* expr) {
 	return n; 
 }
 
-inline Node* new_funcall(char* name, Node* arg) { 
+// TODO:
+Node* new_declaration(char* name, Node* type, Node* expr) { 
+	return new_assign(name, type);
+}
+
+Node* new_funcall(char* name, Node* arg) { 
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_FUNCALL;
 	n->data.funcall.name = name;
@@ -101,7 +108,7 @@ inline Node* new_funcall(char* name, Node* arg) {
 	return n; 
 }
 
-inline Node* new_unaryop(UnaryNodeType type, Node* child) { 
+Node* new_unaryop(UnaryNodeType type, Node* child) { 
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_UNARY;
 	n->data.unary.type = type;
@@ -109,7 +116,7 @@ inline Node* new_unaryop(UnaryNodeType type, Node* child) {
 	return n; 
 }
 
-inline Node* new_binop(Node* left, BinOpNodeType type, Node* right) {
+Node* new_binop(Node* left, BinOpNodeType type, Node* right) {
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_BINOP;
 	n->data.binary_op.type = type;
@@ -118,13 +125,14 @@ inline Node* new_binop(Node* left, BinOpNodeType type, Node* right) {
 	return n; 
 }
 
-inline Node* new_var(char* name) {
+Node* new_var(char* name) {
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_VAR;
+	n->data.var.name = name;
 	return n;
 }
 
-inline Node* new_imm(void* data, ImmNodeType type) {
+Node* new_imm(void* data, ImmNodeType type) {
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_IMM;
 	n->data.imm.type = type;
