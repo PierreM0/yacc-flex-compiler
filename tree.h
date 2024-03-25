@@ -9,8 +9,11 @@ typedef enum {
 	NODETYPE_IMM,
 	NODETYPE_STMT,
 	NODETYPE_FUNCALL,
+    NODETYPE_FUNCALL_IN_PAREN,
 	NODETYPE_VAR,
 	NODETYPE_WHILE,
+    NODETYPE_IF,
+    NODETYPE_IF_ELSE,
 	NODETYPE_ASSIGN,
 } NodeType;
 
@@ -21,6 +24,7 @@ typedef enum {
 
 typedef enum {
 	NODETYPE_IMM_INT,
+    NODETYPE_IMM_STR,
 } ImmNodeType;
 
 typedef enum {
@@ -39,11 +43,24 @@ typedef union {
 	struct {
 		char *name;
 		struct node *arg;
-	} funcall; /* arité = 1 */
+	} funcall;
+    struct {
+       struct node *expr;
+       struct node *maybe_expr;
+    } funcall_in_paren;
 	struct {
 		struct node *condition;
 		struct node *body;
 	} while_;
+    struct {
+        struct node *condition;
+        struct node *body;
+    } if_;
+    struct {
+        struct node *condition;
+        struct node *body_true;
+        struct node *body_else;
+    } if_else;
 	struct {
 		struct node* stmt1;
 		struct node* stmt2;
@@ -87,6 +104,23 @@ Node* new_while(Node* condition, Node* body) {
 	return n; 
 }
 
+Node* new_if(Node* condition, Node* body) {
+    Node* n = (Node*) malloc(sizeof(Node));
+    n->type = NODETYPE_IF;
+    n->data.if_.condition = condition;
+    n->data.if_.body = body;
+    return n;
+}
+
+Node* new_if_else(Node* condition, Node* body_true, Node* body_else) {
+    Node* n = (Node*) malloc(sizeof(Node));
+    n->type = NODETYPE_IF_ELSE;
+    n->data.if_else.condition = condition;
+    n->data.if_else.body_true = body_true;
+    n->data.if_else.body_else = body_else;
+    return n;
+}
+
 Node* new_assign(char* name, Node* expr) { 
 	Node* n = (Node*) malloc(sizeof(Node));
 	n->type = NODETYPE_ASSIGN;
@@ -97,7 +131,7 @@ Node* new_assign(char* name, Node* expr) {
 
 // TODO:
 Node* new_declaration(char* name, Node* type, Node* expr) { 
-	return new_assign(name, type);
+	return new_assign(name, expr);
 }
 
 Node* new_funcall(char* name, Node* arg) { 
@@ -106,6 +140,14 @@ Node* new_funcall(char* name, Node* arg) {
 	n->data.funcall.name = name;
 	n->data.funcall.arg = arg;
 	return n; 
+}
+
+Node* new_funcall_in_paren(Node* expr, Node* maybe_expr) {
+    Node* n = (Node*) malloc(sizeof(Node));
+    n->type = NODETYPE_FUNCALL_IN_PAREN;
+    n->data.funcall_in_paren.expr = expr;
+    n->data.funcall_in_paren.maybe_expr = maybe_expr;
+    return n;
 }
 
 Node* new_unaryop(UnaryNodeType type, Node* child) { 

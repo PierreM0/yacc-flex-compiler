@@ -20,10 +20,11 @@ identifiant   {lettre}({lettre}|{chiffre})*
 "int"         {return(INT);}
 {blanc}       {  /* On l'ignore */  }
 {entier}      {yylval.num = atol(yytext); return(IMM_INT);}
-"\n"          {yylineno += 1;}
+[\n\r]   {yylineno += 1;}
 "="           {return(EQUAL);}
 ":="          {return(ASSIGN);}
 ";"           {return(SEMICOLON);}
+","           {return(COMMA);}
 "while"       {return(WHILE);}
 "if"          {return(IF);}
 "else"        {return(ELSE);}
@@ -34,8 +35,11 @@ identifiant   {lettre}({lettre}|{chiffre})*
 "("           {return(OPEN_PAREN);}
 ")"           {return(CLOSE_PAREN);}
 {identifiant} {yylval.ident = strdup(yytext); return(IDENT);}
-\"(\\\"|[^"])*\" {yylval.str = strdup(yytext); return(IMM_STR);}
 
-. { yyerror("ident not known"); } 
+. {
+    char* str = malloc(64);
+    sprintf(str, "ident not known: `%d`", strdup(yytext)[0]);
+    yyerror(str);
+ }
 
 %%

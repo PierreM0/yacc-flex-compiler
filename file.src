@@ -1,5 +1,18 @@
 int x := 65;
 while not (x = 70) do
-  x = x + 1;
-  putc(x);
+  putchar(x);
+  x := x + 1;
 end
+
+int a := 97;
+if a = 98 do
+   putchar(98);
+else
+   putchar(97);
+end
+
+if a = 97 do
+  putchar(a);
+end
+
+putchar(10);
